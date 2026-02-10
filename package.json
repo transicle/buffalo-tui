@@ -1,0 +1,13 @@
+{
+  "name": "buffalo",
+  "version": "1.0.0",
+  "description": "A beginner friendly TUI framework available on various package managers for Node.js projects",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "demo": "node ./examples/demo.js"
+  },
+  "repository": "https://github.com/transicle/buffalo",
+  "author": "lily.transgirls.win <ilovesuno@proton.me>",
+  "license": "MIT"
+}

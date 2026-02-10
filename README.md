@@ -17,13 +17,13 @@ Buffalo is available for anyone on the [NPM]() marketplace.
 
 Install Buffalo using the Node Package Manager:
 ```bash
-npm install buffalo
+npm install buffalo-tui
 ```
 
 ## Getting Started
 Writing your first TUI with Buffalo is extremely easy and can be done using the code below:
 ```javascript
-import { Screen, Frame, ColorManager, InputManager } from "buffalo";
+import { Screen, Frame, ColorManager, InputManager } from "buffalo-tui";
 
 const screen = new Screen();
 const inputManager = new InputManager();

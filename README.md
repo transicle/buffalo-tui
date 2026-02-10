@@ -20,6 +20,9 @@ Install Buffalo using the Node Package Manager:
 npm install buffalo-tui
 ```
 
+## Demo Preview
+<img width="500" height="500" alt="Screenshot 2026-02-10 11 52 24 AM" src="https://github.com/user-attachments/assets/a9dae81b-8544-4d6f-8a4e-6eb5f4e8af05" />
+
 ## Getting Started
 Writing your first TUI with Buffalo is extremely easy and can be done using the code below:
 ```javascript

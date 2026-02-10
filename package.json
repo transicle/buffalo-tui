@@ -1,6 +1,6 @@
 {
   "name": "buffalo-tui",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A beginner friendly TUI framework available on various package managers for Node.js projects",
   "main": "index.js",
   "type": "module",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/transicle/buffalo.git"
+    "url": "git+https://github.com/transicle/buffalo-tui.git"
   },
   "author": "lily.transgirls.win <ilovesuno@proton.me>",
   "license": "MIT"

@@ -3,7 +3,7 @@
 ## Basic Setup
 
 ```javascript
-import { Screen, Frame, ColorManager } from 'buffalo';
+import { Screen, Frame, ColorManager } from 'buffalo-tui';
 
 const screen = new Screen();
 screen.enterFullscreen();
@@ -13,12 +13,12 @@ screen.enterFullscreen();
 
 ```javascript
 const myFrame = new Frame(
-    50,    // width
-    15,    // height
-    10,    // x position
-    5,     // y position
-    'My Window',  // title
-    new ColorManager().setColor(100, 150, 255)  // border color (RGB)
+    50,    // Width
+    15,    // Height
+    10,    // X position
+    5,     // Y position
+    'My Window',  // Title
+    new ColorManager().setColor(100, 150, 255)  // Border color (RGB)
 );
 
 // Add the frame to the screen
@@ -54,8 +54,6 @@ setInterval(() => {
     // Update content
     myFrame.clearContent();
     myFrame.addContent(1, 1, `Time: ${Date.now()}`);
-    
-    // Render
     screen.render();
 }, 100);
 ```
@@ -63,25 +61,20 @@ setInterval(() => {
 ## Drawing Primitives
 
 ```javascript
-// Draw a rectangle (can be filled or outlined)
 screen.drawRect(10, 10, 20, 10, false, '█', new ColorManager().setColor(255, 0, 0));
 
-// Draw a line
 screen.drawLine(5, 5, 30, 5, '─', new ColorManager().setColor(0, 255, 0));
 
-// Write text directly to buffer
 screen.writeString(15, 15, 'Direct text!', new ColorManager().setColor(255, 255, 255));
 ```
 
 ## Color Management
 
 ```javascript
-// Create colors
 const red = new ColorManager().setColor(255, 0, 0);
 const green = new ColorManager().setColor(0, 255, 0);
 const blue = new ColorManager().setColor(0, 0, 255);
 
-// Get RGB values
 const rgb = red.getColor();  // { R: 255, G: 0, B: 0 }
 
 // Colors are automatically converted to ANSI codes for terminal display
@@ -126,12 +119,11 @@ screen.addElement(frame2);
 
 ```javascript
 function cleanup() {
-    screen.cleanup();  // Restores terminal to normal mode
+    screen.cleanup();
     process.stdin.setRawMode(false);
     process.exit(0);
 }
 
-// Handle process termination
 process.on('SIGINT', cleanup);
 process.on('SIGTERM', cleanup);
 ```

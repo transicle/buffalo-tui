@@ -295,12 +295,12 @@ function updateAllWindows() {
 
 function render() {
   updateAllWindows();
-  let controlText = `Tab: Switch  |  Shift+Arrows: Move  |  Alt+H: Focus Mode`;
+  let controlText = `Tab: Switch  |  Shift+Arrows: Move  |  Alt+Shift+Arrows: Resize  |  Alt+H: Focus Mode`;
   if (activeWindowIndex === 1) {
-    controlText = `↑↓: Navigate  |  Enter: Select  |  Tab: Next Window  |  Shift+Arrows: Move  |  Alt+H: Focus Mode`;
+    controlText = `↑↓: Navigate  |  Enter: Select  |  Tab: Next Window  |  Shift+Arrows: Move  |  Alt+Shift+Arrows: Resize  |  Alt+H: Focus Mode`;
   }
   if (hideOtherWindows) {
-    controlText = `[FOCUS MODE] |  Alt+H: Show All  |  Tab: Switch  |  Shift+Arrows: Move`;
+    controlText = `[FOCUS MODE] |  Alt+H: Show All  |  Tab: Switch  |  Shift+Arrows: Move  |  Alt+Shift+Arrows: Resize`;
   }
   screen.setControlBar(controlText);
   screen.render();
@@ -349,27 +349,67 @@ inputManager.onAny((keyName, rawKey) => {
   }
 
   const activeWin = windows[activeWindowIndex].frame;
+  const moveStep = 2;
+  const resizeStep = 2;
+  const minWidth = 10;
+  const minHeight = 5;
+
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const moveActive = (dx, dy) => {
+    const maxX = Math.max(1, screen.width - activeWin.sizeX - 1);
+    const maxY = Math.max(1, screen.getUsableHeight() - activeWin.sizeY - 1);
+    const newX = clamp(
+      activeWin.posX + dx,
+      1,
+      maxX,
+    );
+    const newY = clamp(
+      activeWin.posY + dy,
+      1,
+      maxY,
+    );
+    activeWin.moveWindow(newX, newY);
+  };
+  const resizeActive = (dw, dh) => {
+    const maxWidth = Math.max(1, screen.width - activeWin.posX - 1);
+    const maxHeight = Math.max(1, screen.getUsableHeight() - activeWin.posY - 1);
+    const effectiveMinWidth = Math.min(minWidth, maxWidth);
+    const effectiveMinHeight = Math.min(minHeight, maxHeight);
+    const newWidth = clamp(activeWin.sizeX + dw, effectiveMinWidth, maxWidth);
+    const newHeight = clamp(activeWin.sizeY + dh, effectiveMinHeight, maxHeight);
+    activeWin.resizeWindow(newWidth, newHeight);
+  };
 
   if (rawKey === "\x1b[1;2A") {
-    activeWin.posY = Math.max(1, activeWin.posY - 2);
+    moveActive(0, -moveStep);
     render();
     return;
   } else if (rawKey === "\x1b[1;2B") {
-    activeWin.posY = Math.min(
-      screen.height - activeWin.sizeY - 1,
-      activeWin.posY + 2,
-    );
+    moveActive(0, moveStep);
     render();
     return;
   } else if (rawKey === "\x1b[1;2C") {
-    activeWin.posX = Math.min(
-      screen.width - activeWin.sizeX - 1,
-      activeWin.posX + 2,
-    );
+    moveActive(moveStep, 0);
     render();
     return;
   } else if (rawKey === "\x1b[1;2D") {
-    activeWin.posX = Math.max(1, activeWin.posX - 2);
+    moveActive(-moveStep, 0);
+    render();
+    return;
+  } else if (rawKey === "\x1b[1;4A") {
+    resizeActive(0, -resizeStep);
+    render();
+    return;
+  } else if (rawKey === "\x1b[1;4B") {
+    resizeActive(0, resizeStep);
+    render();
+    return;
+  } else if (rawKey === "\x1b[1;4C") {
+    resizeActive(resizeStep, 0);
+    render();
+    return;
+  } else if (rawKey === "\x1b[1;4D") {
+    resizeActive(-resizeStep, 0);
     render();
     return;
   }

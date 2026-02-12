@@ -43,6 +43,24 @@ export class Frame extends Element {
         this.content = [];
     }
 
+    moveWindow(newX, newY) {
+        this.posX = newX;
+        this.posY = newY;
+    }
+
+    resizeWindow(newSizeX, newSizeY) {
+        const titleText = this.windowTitle ? ` ${this.windowTitle} ` : '';
+        let minWidth = Math.max(4, titleText.length || 0);
+        for (const item of this.content) {
+            const contentWidth = item.x + (item.text ? item.text.length : 0) + 2;
+            if (contentWidth > minWidth) {
+                minWidth = contentWidth;
+            }
+        }
+        this.sizeX = Math.max(minWidth, newSizeX);
+        this.sizeY = newSizeY;
+    }
+
     drawToBuffer(screen) {
         if (!this.visible) return;
         if (this.backgroundColor) {
@@ -64,7 +82,29 @@ export class Frame extends Element {
         for (const item of this.content) {
             const contentX = this.posX + item.x + 1;
             const contentY = this.posY + item.y + 1;
-            screen.writeString(contentX, contentY, item.text, item.color);
+            const innerLeft = this.posX + 1;
+            const innerRight = this.posX + this.sizeX - 2;
+            const innerTop = this.posY + 1;
+            const innerBottom = this.posY + this.sizeY - 2;
+
+            if (contentY < innerTop || contentY > innerBottom) {
+                continue;
+            }
+
+            const text = item.text || '';
+            const startIndex = Math.max(0, innerLeft - contentX);
+            const endIndex = Math.min(text.length, innerRight - contentX + 1);
+
+            if (startIndex >= endIndex) {
+                continue;
+            }
+
+            screen.writeString(
+                contentX + startIndex,
+                contentY,
+                text.slice(startIndex, endIndex),
+                item.color,
+            );
         }
     }
 }
